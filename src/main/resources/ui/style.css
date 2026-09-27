@@ -71,6 +71,10 @@
     -fx-fill: white;
 }
 
+.table-row-cell:selected .table-cell {
+    -fx-text-fill: white;
+}
+
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #1e1e1e;
 }
