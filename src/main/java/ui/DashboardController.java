@@ -18,6 +18,7 @@ import service.ExportService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 public class DashboardController {
 
@@ -137,12 +138,30 @@ public class DashboardController {
     }
 
     private void updateSummaries(List<Transaction> dbTransactions) {
-        double totalPortfolio = dbTransactions.stream()
-            .filter(t -> t.getType() == model.TransactionType.ALIM)
-            .mapToDouble(Transaction::getTotalPrice).sum() 
-            - dbTransactions.stream()
-            .filter(t -> t.getType() == model.TransactionType.SATIM)
-            .mapToDouble(Transaction::getTotalPrice).sum();
+        // Güncel portföy değeri: her varlık için (güncel fiyat × elde tutulan miktar)
+        // Net pozisyon: ALIM miktarı - SATIM miktarı, sonra güncel fiyatla çarp
+        Map<String, Double> netAmounts = new java.util.HashMap<>();
+        for (Transaction t : dbTransactions) {
+            if (t.getType() == model.TransactionType.ALIM || t.getType() == model.TransactionType.SATIM) {
+                double delta = t.getType() == model.TransactionType.ALIM ? t.getAmount() : -t.getAmount();
+                netAmounts.merge(t.getAssetName(), delta, Double::sum);
+            }
+        }
+        double totalPortfolio = 0.0;
+        for (Map.Entry<String, Double> entry : netAmounts.entrySet()) {
+            if (entry.getValue() <= 0) continue;
+            Double currentPrice = marketDataService.getCurrentPrice(entry.getKey());
+            if (currentPrice != null) {
+                totalPortfolio += currentPrice * entry.getValue();
+            } else {
+                // API'da fiyatı olmayan varlıklar için maliyet bazlı hesapla
+                for (Transaction t : dbTransactions) {
+                    if (t.getAssetName().equals(entry.getKey()) && t.getType() == model.TransactionType.ALIM) {
+                        totalPortfolio += t.getTotalPrice();
+                    }
+                }
+            }
+        }
 
         service.ExpenseService expenseService = new service.ExpenseService();
         LocalDate now = LocalDate.now();
