@@ -88,47 +88,36 @@ public class DashboardController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
+        colCurrentPrice.setCellValueFactory(new PropertyValueFactory<>("assetName"));
         colCurrentPrice.setCellFactory(column -> new TableCell<Transaction, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || getTableView().getItems().get(getIndex()) == null) {
-                    setText(null);
-                } else {
-                    Transaction t = getTableView().getItems().get(getIndex());
-                    Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
-                    if (currentPrice != null) {
-                        setText(String.format("%.2f %s", currentPrice, "TL"));
-                    } else {
-                        setText("-");
-                    }
-                }
+                setText(null);
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) return;
+                Transaction t = getTableView().getItems().get(getIndex());
+                if (t == null) return;
+                Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                setText(currentPrice != null ? String.format("%.2f TL", currentPrice) : "-");
             }
         });
 
+        colPnL.setCellValueFactory(new PropertyValueFactory<>("assetName"));
         colPnL.setCellFactory(column -> new TableCell<Transaction, Double>() {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                if (empty || getTableView().getItems().get(getIndex()) == null) {
-                    setText(null);
-                } else {
-                    Transaction t = getTableView().getItems().get(getIndex());
-                    Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
-                    if (currentPrice != null && t.getType() == model.TransactionType.ALIM) {
-                        // Eğer ALIM ise güncel fiyattan kâr-zarar
-                        double pnl = (currentPrice - t.getPricePerUnit()) * t.getAmount();
-                        setText(String.format("%.2f TL", pnl));
-                        if (pnl >= 0) {
-                            setStyle("-fx-text-fill: #4caf50;");
-                        } else {
-                            setStyle("-fx-text-fill: #f44336;");
-                        }
-                    } else {
-                        setText("-");
-                        setStyle("");
-                    }
-                }
+                setText(null);
+                setStyle("");
+                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) return;
+                Transaction t = getTableView().getItems().get(getIndex());
+                if (t == null) return;
+                if (t.getType() != model.TransactionType.ALIM) { setText("-"); return; }
+                Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                if (currentPrice == null) { setText("-"); return; }
+                double pnl = (currentPrice - t.getPricePerUnit()) * t.getAmount();
+                setText(String.format("%.2f TL", pnl));
+                setStyle(pnl >= 0 ? "-fx-text-fill: #4caf50;" : "-fx-text-fill: #f44336;");
             }
         });
 

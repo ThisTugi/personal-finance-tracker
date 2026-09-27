@@ -33,9 +33,9 @@ public class MarketDataService {
                         currentPrices.put(key.toLowerCase(), price);
                         
                         if (key.equals("gram-altin")) {
-                            currentPrices.put("altın", price);
+                            currentPrices.put("gram alt\u0131n", price);
+                            currentPrices.put("alt\u0131n", price);
                             currentPrices.put("altin", price);
-                            currentPrices.put("gram altın", price);
                             currentPrices.put("gram", price);
                         } else if (key.equals("USD")) {
                             currentPrices.put("dolar", price);
@@ -44,24 +44,25 @@ public class MarketDataService {
                             currentPrices.put("euro", price);
                             currentPrices.put("eur", price);
                         } else if (key.equals("gumus")) {
-                            currentPrices.put("gümüş", price);
+                            currentPrices.put("g\u00fcm\u00fc\u015f", price);
                         } else if (key.equals("ceyrek-altin")) {
-                            currentPrices.put("çeyrek", price);
-                            currentPrices.put("çeyrek altın", price);
+                            currentPrices.put("\u00e7eyrek", price);
+                            currentPrices.put("\u00e7eyrek alt\u0131n", price);
                             currentPrices.put("ceyrek", price);
                         } else if (key.equals("yarim-altin")) {
-                            currentPrices.put("yarım", price);
-                            currentPrices.put("yarım altın", price);
+                            currentPrices.put("yar\u0131m", price);
+                            currentPrices.put("yar\u0131m alt\u0131n", price);
                         } else if (key.equals("tam-altin")) {
                             currentPrices.put("tam", price);
-                            currentPrices.put("tam altın", price);
+                            currentPrices.put("tam alt\u0131n", price);
                         }
                     } catch (NumberFormatException e) {
-                        // ignore
                     }
                 }
             }
             System.out.println("Market data fetched successfully. Cached " + currentPrices.size() + " assets.");
+            System.out.println("gram alt\u0131n price: " + currentPrices.get("gram alt\u0131n"));
+            System.out.println("\u00e7eyrek alt\u0131n price: " + currentPrices.get("\u00e7eyrek alt\u0131n"));
         } catch (Exception e) {
             System.err.println("Could not fetch market data: " + e.getMessage());
         }
@@ -69,6 +70,11 @@ public class MarketDataService {
 
     public Double getCurrentPrice(String assetName) {
         if (assetName == null) return null;
-        return currentPrices.get(assetName.toLowerCase().trim());
+        String normalized = assetName.trim().toLowerCase(java.util.Locale.forLanguageTag("tr-TR"));
+        Double price = currentPrices.get(normalized);
+        if (price == null) {
+            price = currentPrices.get(assetName.trim().toLowerCase(java.util.Locale.ENGLISH));
+        }
+        return price;
     }
 }
