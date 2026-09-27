@@ -14,11 +14,20 @@ public class Category {
     public static final String ENTERTAINMENT = "Eğlence";
     public static final String OTHER = "Diğer";
 
+    public static final String SALARY = "Maaş";
+    public static final String BONUS = "Prim / İkramiye";
+    public static final String DIVIDEND = "Faiz / Temettü";
+    public static final String OTHER_INCOME = "Diğer Gelir";
+
     public static String[] getInvestmentCategories() {
         return new String[] { STOCK, COMMODITY, CRYPTO, CASH };
     }
 
     public static String[] getExpenseCategories() {
         return new String[] { FOOD, TRANSPORT, HOUSING, BILLS, EDUCATION, ENTERTAINMENT, OTHER };
+    }
+
+    public static String[] getIncomeCategories() {
+        return new String[] { SALARY, BONUS, DIVIDEND, OTHER_INCOME };
     }
 }

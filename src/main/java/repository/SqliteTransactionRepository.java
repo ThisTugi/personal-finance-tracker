@@ -12,7 +12,7 @@ public class SqliteTransactionRepository implements ITransactionRepository {
     
     @Override
     public void add(Transaction t) {
-        String sql = "INSERT INTO transactions (asset_name, type, amount, price_per_unit, date, category) VALUES (?, ?, ?, ?, ?, ?)";
+        String sql = "INSERT INTO transactions (asset_name, type, amount, price_per_unit, date, category, currency) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
@@ -22,6 +22,7 @@ public class SqliteTransactionRepository implements ITransactionRepository {
             pstmt.setDouble(4, t.getPricePerUnit());
             pstmt.setString(5, t.getDate().toString());
             pstmt.setString(6, t.getCategory());
+            pstmt.setString(7, t.getCurrency());
             
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -37,7 +38,8 @@ public class SqliteTransactionRepository implements ITransactionRepository {
                 rs.getDouble("amount"),
                 rs.getDouble("price_per_unit"),
                 LocalDate.parse(rs.getString("date")),
-                rs.getString("category")
+                rs.getString("category"),
+                rs.getString("currency")
         );
     }
 
@@ -97,7 +99,7 @@ public class SqliteTransactionRepository implements ITransactionRepository {
 
     @Override
     public void update(Transaction t) {
-        String sql = "UPDATE transactions SET asset_name = ?, type = ?, amount = ?, price_per_unit = ?, date = ?, category = ? WHERE id = ?";
+        String sql = "UPDATE transactions SET asset_name = ?, type = ?, amount = ?, price_per_unit = ?, date = ?, category = ?, currency = ? WHERE id = ?";
         try (Connection conn = DatabaseManager.getConnection();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             
@@ -107,7 +109,8 @@ public class SqliteTransactionRepository implements ITransactionRepository {
             pstmt.setDouble(4, t.getPricePerUnit());
             pstmt.setString(5, t.getDate().toString());
             pstmt.setString(6, t.getCategory());
-            pstmt.setInt(7, t.getId());
+            pstmt.setString(7, t.getCurrency());
+            pstmt.setInt(8, t.getId());
             
             pstmt.executeUpdate();
         } catch (SQLException e) {

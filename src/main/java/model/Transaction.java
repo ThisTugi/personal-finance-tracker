@@ -10,17 +10,19 @@ public class Transaction {
     private double pricePerUnit;
     private LocalDate date;
     private String category;
+    private String currency;
 
-    public Transaction(String assetName, TransactionType type, double amount, double pricePerUnit, LocalDate date, String category) {
+    public Transaction(String assetName, TransactionType type, double amount, double pricePerUnit, LocalDate date, String category, String currency) {
         this.assetName = assetName;
         this.type = type;
         this.amount = amount;
         this.pricePerUnit = pricePerUnit;
         this.date = date;
         this.category = category;
+        this.currency = (currency != null && !currency.isEmpty()) ? currency : "TL";
     }
 
-    public Transaction(int id, String assetName, TransactionType type, double amount, double pricePerUnit, LocalDate date, String category) {
+    public Transaction(int id, String assetName, TransactionType type, double amount, double pricePerUnit, LocalDate date, String category, String currency) {
         this.id = id;
         this.assetName = assetName;
         this.type = type;
@@ -28,6 +30,7 @@ public class Transaction {
         this.pricePerUnit = pricePerUnit;
         this.date = date;
         this.category = category;
+        this.currency = (currency != null && !currency.isEmpty()) ? currency : "TL";
     }
 
     public double getTotalPrice() {
@@ -91,6 +94,14 @@ public class Transaction {
         this.category = category;
     }
 
+    public String getCurrency() {
+        return currency;
+    }
+
+    public void setCurrency(String currency) {
+        this.currency = currency;
+    }
+
     @Override
     public String toString() {
         return "Transaction{" +
@@ -98,8 +109,8 @@ public class Transaction {
                 ", assetName='" + assetName + '\'' +
                 ", type=" + type +
                 ", amount=" + amount +
-                ", pricePerUnit=" + pricePerUnit +
-                ", totalPrice=" + getTotalPrice() +
+                ", pricePerUnit=" + pricePerUnit + " " + currency +
+                ", totalPrice=" + getTotalPrice() + " " + currency +
                 ", date=" + date +
                 ", category='" + category + '\'' +
                 '}';

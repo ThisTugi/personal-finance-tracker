@@ -20,10 +20,13 @@
         <TextField fx:id="txtAmount" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         
         <Label fx:id="lblPrice" text="Fiyat:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
-        <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+        <HBox spacing="5" GridPane.columnIndex="1" GridPane.rowIndex="3">
+            <TextField fx:id="txtPrice" HBox.hgrow="ALWAYS"/>
+            <ComboBox fx:id="cbCurrency" prefWidth="80"/>
+        </HBox>
         
         <Label text="Kategori:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
-        <TextField fx:id="txtCategory" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+        <ComboBox fx:id="cbCategory" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
     </GridPane>
     
     <Label fx:id="lblError" textFill="red"/>

@@ -7,6 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.layout.StackPane;
 import model.Transaction;
 import repository.ITransactionRepository;
@@ -47,8 +50,35 @@ public class DashboardController {
         colAsset.setCellValueFactory(new PropertyValueFactory<>("assetName"));
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        
         colPrice.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+        colPrice.setCellFactory(column -> new TableCell<Transaction, Double>() {
+            @Override
+            protected void updateItem(Double price, boolean empty) {
+                super.updateItem(price, empty);
+                if (empty || price == null) {
+                    setText(null);
+                } else {
+                    Transaction t = getTableView().getItems().get(getIndex());
+                    setText(String.format("%.2f %s", price, t.getCurrency()));
+                }
+            }
+        });
+        
         colTotal.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
+        colTotal.setCellFactory(column -> new TableCell<Transaction, Double>() {
+            @Override
+            protected void updateItem(Double total, boolean empty) {
+                super.updateItem(total, empty);
+                if (empty || total == null) {
+                    setText(null);
+                } else {
+                    Transaction t = getTableView().getItems().get(getIndex());
+                    setText(String.format("%.2f %s", total, t.getCurrency()));
+                }
+            }
+        });
+        
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
@@ -114,6 +144,24 @@ public class DashboardController {
         } catch (java.io.IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    public void handleDeleteTransaction() {
+        Transaction selected = transactionTable.getSelectionModel().getSelectedItem();
+        if (selected == null) {
+            Alert alert = new Alert(Alert.AlertType.WARNING, "Lütfen silmek için tablodan bir işlem seçin.", ButtonType.OK);
+            alert.showAndWait();
+            return;
+        }
+        
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "Seçili işlemi silmek istediğinize emin misiniz?", ButtonType.YES, ButtonType.NO);
+        alert.showAndWait().ifPresent(response -> {
+            if (response == ButtonType.YES) {
+                repository.delete(selected.getId());
+                loadTransactions();
+            }
+        });
     }
 
     @FXML

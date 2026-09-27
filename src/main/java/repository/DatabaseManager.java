@@ -25,7 +25,8 @@ public class DatabaseManager {
                 amount REAL NOT NULL,
                 price_per_unit REAL NOT NULL,
                 date TEXT NOT NULL,
-                category TEXT NOT NULL
+                category TEXT NOT NULL,
+                currency TEXT DEFAULT 'TL'
             );
             """;
 
@@ -39,6 +40,13 @@ public class DatabaseManager {
             stmt.executeUpdate("UPDATE transactions SET type = 'SATIM' WHERE type = 'SELL'");
             stmt.executeUpdate("UPDATE transactions SET type = 'GIDER' WHERE type = 'EXPENSE'");
             stmt.executeUpdate("UPDATE transactions SET type = 'GELIR' WHERE type = 'INCOME'");
+            
+            // Tablo eski sürümse currency kolonunu ekliyoruz
+            try {
+                stmt.execute("ALTER TABLE transactions ADD COLUMN currency TEXT DEFAULT 'TL'");
+            } catch (SQLException ignore) {
+                // Kolon zaten varsa SQLite hata fırlatır, görmezden geliyoruz
+            }
             
             System.out.println("Veritabanı tabloları başarıyla hazırlandı ve güncellendi.");
 

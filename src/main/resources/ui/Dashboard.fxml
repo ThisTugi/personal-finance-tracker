@@ -25,6 +25,7 @@
         <VBox spacing="10" style="-fx-padding: 20;">
             <HBox spacing="10">
                 <Button text="Yeni İşlem Ekle" onAction="#handleAddTransaction"/>
+                <Button text="Seçili İşlemi Sil" onAction="#handleDeleteTransaction"/>
                 <Button text="Dışa Aktar (CSV)" onAction="#handleExport"/>
             </HBox>
             <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS">

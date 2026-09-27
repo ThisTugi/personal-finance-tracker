@@ -23,7 +23,8 @@ public class AddTransactionController {
     @FXML private Label lblAmount;
     @FXML private TextField txtPrice;
     @FXML private Label lblPrice;
-    @FXML private TextField txtCategory;
+    @FXML private ComboBox<String> cbCurrency;
+    @FXML private ComboBox<String> cbCategory;
     @FXML private Label lblError;
 
     private ITransactionRepository repository;
@@ -39,21 +40,33 @@ public class AddTransactionController {
         repository = new SqliteTransactionRepository();
         validationService = new ValidationService();
         cbType.setItems(FXCollections.observableArrayList(TransactionType.values()));
+        cbCurrency.setItems(FXCollections.observableArrayList("TL", "USD", "EUR"));
+        cbCurrency.getSelectionModel().selectFirst();
         
         cbType.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            if (newVal == TransactionType.GELIR || newVal == TransactionType.GIDER) {
+            if (newVal == TransactionType.GELIR) {
                 lblAsset.setText("Açıklama / Kalem:");
                 lblAmount.setText("Adet (Oto: 1):");
                 txtAmount.setText("1");
                 txtAmount.setDisable(true);
                 lblPrice.setText("Toplam Tutar:");
+                cbCategory.setItems(FXCollections.observableArrayList(model.Category.getIncomeCategories()));
+            } else if (newVal == TransactionType.GIDER) {
+                lblAsset.setText("Açıklama / Kalem:");
+                lblAmount.setText("Adet (Oto: 1):");
+                txtAmount.setText("1");
+                txtAmount.setDisable(true);
+                lblPrice.setText("Toplam Tutar:");
+                cbCategory.setItems(FXCollections.observableArrayList(model.Category.getExpenseCategories()));
             } else {
                 lblAsset.setText("Varlık Adı:");
                 lblAmount.setText("Miktar:");
                 txtAmount.setText("");
                 txtAmount.setDisable(false);
                 lblPrice.setText("Birim Fiyat:");
+                cbCategory.setItems(FXCollections.observableArrayList(model.Category.getInvestmentCategories()));
             }
+            cbCategory.getSelectionModel().selectFirst();
         });
         
         cbType.getSelectionModel().selectFirst();
@@ -66,9 +79,10 @@ public class AddTransactionController {
             TransactionType type = cbType.getValue();
             double amount = Double.parseDouble(txtAmount.getText());
             double price = Double.parseDouble(txtPrice.getText());
-            String category = txtCategory.getText();
+            String category = cbCategory.getValue();
+            String currency = cbCurrency.getValue();
 
-            Transaction t = new Transaction(asset, type, amount, price, LocalDate.now(), category);
+            Transaction t = new Transaction(asset, type, amount, price, LocalDate.now(), category, currency);
             
             validationService.validateTransaction(t, repository.getAll());
             repository.add(t);
