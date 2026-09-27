@@ -59,8 +59,24 @@
     -fx-background-color: #2d2d30;
 }
 
+.table-row-cell .table-cell {
+    -fx-text-fill: #e0e0e0;
+}
+
+.table-row-cell .text {
+    -fx-fill: #e0e0e0;
+}
+
 .table-row-cell:odd {
     -fx-background-color: #333337;
+}
+
+.table-row-cell:odd .table-cell {
+    -fx-text-fill: #e0e0e0;
+}
+
+.table-row-cell:odd .text {
+    -fx-fill: #e0e0e0;
 }
 
 .table-row-cell:selected {
