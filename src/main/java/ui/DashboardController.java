@@ -28,6 +28,7 @@ public class DashboardController {
     @FXML private TableColumn<Transaction, String> colType;
     @FXML private TableColumn<Transaction, Double> colAmount;
     @FXML private TableColumn<Transaction, Double> colPrice;
+    @FXML private TableColumn<Transaction, Double> colTotal;
     @FXML private TableColumn<Transaction, LocalDate> colDate;
     @FXML private TableColumn<Transaction, String> colCategory;
     
@@ -47,6 +48,7 @@ public class DashboardController {
         colType.setCellValueFactory(new PropertyValueFactory<>("type"));
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colPrice.setCellValueFactory(new PropertyValueFactory<>("pricePerUnit"));
+        colTotal.setCellValueFactory(new PropertyValueFactory<>("totalPrice"));
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
@@ -75,8 +77,16 @@ public class DashboardController {
         lblTotalPortfolio.setText(String.format("%.2f TL", totalPortfolio));
         lblMonthlyExpense.setText(String.format("%.2f TL", monthlyExpense));
         
-        // PnL placeholder logic
-        lblNetPnL.setText("Hesaplanıyor...");
+        // PnL calculation
+        service.PortfolioService portfolioService = new service.PortfolioService();
+        double netPnL = portfolioService.calculateTotalRealizedPnL(dbTransactions);
+        
+        lblNetPnL.setText(String.format("%.2f TL", netPnL));
+        if (netPnL >= 0) {
+            lblNetPnL.setStyle("-fx-text-fill: #4caf50;");
+        } else {
+            lblNetPnL.setStyle("-fx-text-fill: #f44336;");
+        }
 
         java.util.Map<String, Double> distribution = expenseService.calculateExpenseDistribution(dbTransactions, now.getYear(), now.getMonthValue());
         javafx.scene.chart.PieChart pieChart = new javafx.scene.chart.PieChart();

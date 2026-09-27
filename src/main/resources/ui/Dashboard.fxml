@@ -30,12 +30,13 @@
             <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS">
                 <columns>
                     <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colAsset" text="Varlık" prefWidth="150"/>
-                    <TableColumn fx:id="colType" text="Tür" prefWidth="100"/>
-                    <TableColumn fx:id="colAmount" text="Adet/Miktar" prefWidth="100"/>
-                    <TableColumn fx:id="colPrice" text="Fiyat" prefWidth="100"/>
-                    <TableColumn fx:id="colDate" text="Tarih" prefWidth="150"/>
-                    <TableColumn fx:id="colCategory" text="Kategori" prefWidth="150"/>
+                    <TableColumn fx:id="colAsset" text="Varlık / Açıklama" prefWidth="150"/>
+                    <TableColumn fx:id="colType" text="Tür" prefWidth="80"/>
+                    <TableColumn fx:id="colAmount" text="Adet/Miktar" prefWidth="80"/>
+                    <TableColumn fx:id="colPrice" text="Birim Fiyat" prefWidth="100"/>
+                    <TableColumn fx:id="colTotal" text="Toplam Tutar" prefWidth="100"/>
+                    <TableColumn fx:id="colDate" text="Tarih" prefWidth="100"/>
+                    <TableColumn fx:id="colCategory" text="Kategori" prefWidth="120"/>
                 </columns>
             </TableView>
         </VBox>

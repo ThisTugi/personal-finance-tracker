@@ -47,4 +47,11 @@ public class PortfolioService {
         }
         return realizedPnL;
     }
+    public double calculateTotalRealizedPnL(List<Transaction> transactions) {
+        return transactions.stream()
+                .map(Transaction::getAssetName)
+                .distinct()
+                .mapToDouble(asset -> calculateRealizedPnL(transactions, asset))
+                .sum();
+    }
 }
