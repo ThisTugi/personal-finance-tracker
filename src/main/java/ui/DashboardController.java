@@ -108,8 +108,6 @@ public class DashboardController {
 
         lblTotalPortfolio.setText(String.format("%.2f TL", totalPortfolio));
         lblMonthlyExpense.setText(String.format("%.2f TL", monthlyExpense));
-        
-        // PnL calculation
         service.PortfolioService portfolioService = new service.PortfolioService();
         double netPnL = portfolioService.calculateTotalRealizedPnL(dbTransactions);
         
@@ -119,8 +117,6 @@ public class DashboardController {
         } else {
             lblNetPnL.setStyle("-fx-text-fill: #f44336;");
         }
-
-        // Gider Dağılımı
         java.util.Map<String, Double> expDistribution = expenseService.calculateExpenseDistribution(dbTransactions, now.getYear(), now.getMonthValue());
         javafx.scene.chart.PieChart expPieChart = new javafx.scene.chart.PieChart();
         for (java.util.Map.Entry<String, Double> entry : expDistribution.entrySet()) {
@@ -128,8 +124,6 @@ public class DashboardController {
         }
         expenseChartContainer.getChildren().clear();
         expenseChartContainer.getChildren().add(expPieChart);
-
-        // Gelir Dağılımı
         java.util.Map<String, Double> incDistribution = expenseService.calculateIncomeDistribution(dbTransactions, now.getYear(), now.getMonthValue());
         javafx.scene.chart.PieChart incPieChart = new javafx.scene.chart.PieChart();
         for (java.util.Map.Entry<String, Double> entry : incDistribution.entrySet()) {
@@ -137,12 +131,11 @@ public class DashboardController {
         }
         incomeChartContainer.getChildren().clear();
         incomeChartContainer.getChildren().add(incPieChart);
-
-        // Gelir/Gider Özeti (Karşılaştırma)
-        double totalIncome = expenseService.calculateTotalMonthlyIncome(dbTransactions, now.getYear(), now.getMonthValue());
+        java.util.Map<String, Double> assetDistribution = portfolioService.calculateAssetDistribution(dbTransactions);
         javafx.scene.chart.PieChart summaryPieChart = new javafx.scene.chart.PieChart();
-        if (totalIncome > 0) summaryPieChart.getData().add(new javafx.scene.chart.PieChart.Data("Gelir", totalIncome));
-        if (monthlyExpense > 0) summaryPieChart.getData().add(new javafx.scene.chart.PieChart.Data("Gider", monthlyExpense));
+        for (java.util.Map.Entry<String, Double> entry : assetDistribution.entrySet()) {
+            summaryPieChart.getData().add(new javafx.scene.chart.PieChart.Data(entry.getKey(), entry.getValue()));
+        }
         summaryChartContainer.getChildren().clear();
         summaryChartContainer.getChildren().add(summaryPieChart);
     }

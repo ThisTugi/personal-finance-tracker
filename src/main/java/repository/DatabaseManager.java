@@ -35,17 +35,14 @@ public class DatabaseManager {
 
             stmt.execute(sql);
             
-            // Veritabanındaki eski İngilizce kayıtları Türkçe'ye çeviriyoruz (Migration)
             stmt.executeUpdate("UPDATE transactions SET type = 'ALIM' WHERE type = 'BUY'");
             stmt.executeUpdate("UPDATE transactions SET type = 'SATIM' WHERE type = 'SELL'");
             stmt.executeUpdate("UPDATE transactions SET type = 'GIDER' WHERE type = 'EXPENSE'");
             stmt.executeUpdate("UPDATE transactions SET type = 'GELIR' WHERE type = 'INCOME'");
             
-            // Tablo eski sürümse currency kolonunu ekliyoruz
             try {
                 stmt.execute("ALTER TABLE transactions ADD COLUMN currency TEXT DEFAULT 'TL'");
             } catch (SQLException ignore) {
-                // Kolon zaten varsa SQLite hata fırlatır, görmezden geliyoruz
             }
             
             System.out.println("Veritabanı tabloları başarıyla hazırlandı ve güncellendi.");

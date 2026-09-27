@@ -70,3 +70,36 @@
 .table-row-cell:selected .text {
     -fx-fill: white;
 }
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #1e1e1e;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #2d2d30;
+    -fx-border-color: #3f3f46;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #007acc;
+}
+
+.tab-pane .tab .tab-label {
+    -fx-text-fill: #e0e0e0;
+}
+
+.tab-pane .tab:selected .tab-label {
+    -fx-text-fill: white;
+}
+
+.chart-pie-label {
+    -fx-fill: #e0e0e0;
+}
+
+.chart-legend {
+    -fx-background-color: transparent;
+}
+
+.chart-legend-item {
+    -fx-text-fill: #e0e0e0;
+}

@@ -29,7 +29,6 @@ public class PortfolioService {
         double currentAmount = 0.0;
         double totalCost = 0.0;
 
-        // Varsayım: List<Transaction> tarih sırasına göre sıralı gelmektedir.
         for (Transaction t : transactions) {
             if (t.getAssetName().equals(assetName)) {
                 if (t.getType() == TransactionType.ALIM) {
@@ -53,5 +52,43 @@ public class PortfolioService {
                 .distinct()
                 .mapToDouble(asset -> calculateRealizedPnL(transactions, asset))
                 .sum();
+    }
+
+    public java.util.Map<String, Double> calculateAssetDistribution(List<Transaction> transactions) {
+        java.util.Map<String, Double> distribution = new java.util.HashMap<>();
+        
+        double cash = 0;
+        for (Transaction t : transactions) {
+            if (t.getType() == TransactionType.GELIR || t.getType() == TransactionType.SATIM) {
+                cash += t.getTotalPrice();
+            } else if (t.getType() == TransactionType.GIDER || t.getType() == TransactionType.ALIM) {
+                cash -= t.getTotalPrice();
+            }
+        }
+        if (cash > 0) {
+            distribution.put("Nakit", cash);
+        }
+
+        List<String> assets = transactions.stream()
+                .filter(t -> t.getType() == TransactionType.ALIM || t.getType() == TransactionType.SATIM)
+                .map(Transaction::getAssetName)
+                .distinct()
+                .toList();
+
+        for (String asset : assets) {
+            double currentAmount = 0.0;
+            for (Transaction t : transactions) {
+                if (t.getAssetName().equals(asset)) {
+                    if (t.getType() == TransactionType.ALIM) currentAmount += t.getAmount();
+                    else if (t.getType() == TransactionType.SATIM) currentAmount -= t.getAmount();
+                }
+            }
+            if (currentAmount > 0) {
+                double avgCost = calculateWeightedAverageCost(transactions, asset);
+                distribution.put(asset, currentAmount * avgCost);
+            }
+        }
+        
+        return distribution;
     }
 }

@@ -44,7 +44,7 @@
     </center>
     <right>
         <TabPane fx:id="chartTabPane" style="-fx-padding: 10;" prefWidth="320" tabClosingPolicy="UNAVAILABLE">
-            <Tab text="Gelir/Gider Özeti">
+            <Tab text="Varlıklarım">
                 <StackPane fx:id="summaryChartContainer" prefWidth="300" prefHeight="300"/>
             </Tab>
             <Tab text="Gider Dağılımı">
