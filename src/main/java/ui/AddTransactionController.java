@@ -1,4 +1,4 @@
-package ui;
+﻿package ui;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -62,7 +62,12 @@ public class AddTransactionController {
                 cbCategory.setItems(FXCollections.observableArrayList(model.Category.getExpenseCategories()));
             } else {
                 lblAsset.setText("Varlık Adı:");
-                cbAsset.setItems(FXCollections.observableArrayList("Gram Altın", "Çeyrek Altın", "Yarım Altın", "Tam Altın", "Gümüş", "USD", "EUR"));
+                cbAsset.setItems(FXCollections.observableArrayList(
+                    "Gram Altın", "Çeyrek Altın", "Yarım Altın", "Tam Altın", "Gümüş",
+                    "USD", "EUR",
+                    "THYAO", "ASELS", "GARAN", "YKBNK", "SISE", "KCHOL",
+                    "BIMAS", "TUPRS", "AKBNK", "SAHOL", "EREGL", "TOASO"
+                ));
                 lblAmount.setText("Miktar:");
                 txtAmount.setText("");
                 txtAmount.setDisable(false);
