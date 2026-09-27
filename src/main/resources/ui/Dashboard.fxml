@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:controller="ui.DashboardController" stylesheets="@style.css">
+    <top>
+        <HBox spacing="20" alignment="CENTER" style="-fx-padding: 20;">
+            <VBox styleClass="summary-card">
+                <Label text="Toplam Portföy"/>
+                <Label fx:id="lblTotalPortfolio" text="0.0 TL" styleClass="amount-label"/>
+            </VBox>
+            <VBox styleClass="summary-card">
+                <Label text="Aylık Gider"/>
+                <Label fx:id="lblMonthlyExpense" text="0.0 TL" styleClass="amount-label"/>
+            </VBox>
+            <VBox styleClass="summary-card">
+                <Label text="Net Kâr/Zarar"/>
+                <Label fx:id="lblNetPnL" text="0.0 TL" styleClass="amount-label"/>
+            </VBox>
+        </HBox>
+    </top>
+    <center>
+        <VBox spacing="10" style="-fx-padding: 20;">
+            <HBox spacing="10">
+                <Button text="Yeni İşlem Ekle" onAction="#handleAddTransaction"/>
+                <Button text="Dışa Aktar (CSV)" onAction="#handleExport"/>
+            </HBox>
+            <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS">
+                <columns>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
+                    <TableColumn fx:id="colAsset" text="Varlık" prefWidth="150"/>
+                    <TableColumn fx:id="colType" text="Tür" prefWidth="100"/>
+                    <TableColumn fx:id="colAmount" text="Adet/Miktar" prefWidth="100"/>
+                    <TableColumn fx:id="colPrice" text="Fiyat" prefWidth="100"/>
+                    <TableColumn fx:id="colDate" text="Tarih" prefWidth="150"/>
+                    <TableColumn fx:id="colCategory" text="Kategori" prefWidth="150"/>
+                </columns>
+            </TableView>
+        </VBox>
+    </center>
+    <right>
+        <VBox style="-fx-padding: 20;" alignment="CENTER">
+            <Label text="Gider Dağılımı"/>
+            <StackPane fx:id="chartContainer" prefWidth="300" prefHeight="300"/>
+        </VBox>
+    </right>
+</BorderPane>
