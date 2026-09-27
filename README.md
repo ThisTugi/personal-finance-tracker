@@ -6,6 +6,8 @@ Designed with clean architecture principles (MVC + Repository Pattern) and built
 
 ## Features
 
+![Demo](demo.gif)
+
 Transaction Management: Record daily expenses, asset purchases, and sales with dedicated transaction types (BUY, SELL, EXPENSE).
 
 Portfolio Analytics:
