@@ -1,4 +1,4 @@
-﻿package ui;
+package ui;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -42,10 +42,10 @@ public class AddTransactionController {
         cbType.setItems(FXCollections.observableArrayList(TransactionType.values()));
         cbCurrency.setItems(FXCollections.observableArrayList("TL", "USD", "EUR"));
         cbCurrency.getSelectionModel().selectFirst();
-        
+
         cbType.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == TransactionType.GELIR) {
-                lblAsset.setText("Açıklama / Kalem:");
+                lblAsset.setText("A\u00e7\u0131klama / Kalem:");
                 cbAsset.setItems(FXCollections.observableArrayList());
                 lblAmount.setText("Adet (Oto: 1):");
                 txtAmount.setText("1");
@@ -53,7 +53,7 @@ public class AddTransactionController {
                 lblPrice.setText("Toplam Tutar:");
                 cbCategory.setItems(FXCollections.observableArrayList(model.Category.getIncomeCategories()));
             } else if (newVal == TransactionType.GIDER) {
-                lblAsset.setText("Açıklama / Kalem:");
+                lblAsset.setText("A\u00e7\u0131klama / Kalem:");
                 cbAsset.setItems(FXCollections.observableArrayList());
                 lblAmount.setText("Adet (Oto: 1):");
                 txtAmount.setText("1");
@@ -61,9 +61,9 @@ public class AddTransactionController {
                 lblPrice.setText("Toplam Tutar:");
                 cbCategory.setItems(FXCollections.observableArrayList(model.Category.getExpenseCategories()));
             } else {
-                lblAsset.setText("Varlık Adı:");
+                lblAsset.setText("Varl\u0131k Ad\u0131:");
                 cbAsset.setItems(FXCollections.observableArrayList(
-                    "Gram Altın", "Çeyrek Altın", "Yarım Altın", "Tam Altın", "Gümüş",
+                    "Gram Alt\u0131n", "\u00c7eyrek Alt\u0131n", "Yar\u0131m Alt\u0131n", "Tam Alt\u0131n", "G\u00fcm\u00fc\u015f",
                     "USD", "EUR",
                     "THYAO", "ASELS", "GARAN", "YKBNK", "SISE", "KCHOL",
                     "BIMAS", "TUPRS", "AKBNK", "SAHOL", "EREGL", "TOASO"
@@ -76,7 +76,7 @@ public class AddTransactionController {
             }
             cbCategory.getSelectionModel().selectFirst();
         });
-        
+
         cbType.getSelectionModel().selectFirst();
     }
 
@@ -85,7 +85,11 @@ public class AddTransactionController {
         try {
             String asset = cbAsset.getValue();
             if (asset == null || asset.trim().isEmpty()) {
-                asset = cbAsset.getEditor().getText(); // Fallback for manual typing if getValue() returns null
+                asset = cbAsset.getEditor().getText();
+            }
+            if (asset == null || asset.trim().isEmpty()) {
+                lblError.setText("L\u00fctfen bir varl\u0131k se\u00e7in veya yaz\u0131n.");
+                return;
             }
             TransactionType type = cbType.getValue();
             double amount = Double.parseDouble(txtAmount.getText());
@@ -94,20 +98,19 @@ public class AddTransactionController {
             String currency = cbCurrency.getValue();
 
             Transaction t = new Transaction(asset, type, amount, price, LocalDate.now(), category, currency);
-            
             validationService.validateTransaction(t, repository.getAll());
             repository.add(t);
-            
+
             if (dashboardController != null) {
                 dashboardController.loadTransactions();
             }
             closeWindow();
         } catch (NumberFormatException e) {
-            lblError.setText("Lütfen geçerli sayılar girin.");
+            lblError.setText("L\u00fctfen ge\u00e7erli say\u0131lar girin.");
         } catch (IllegalArgumentException e) {
             lblError.setText(e.getMessage());
         } catch (Exception e) {
-            lblError.setText("Bir hata oluştu: " + e.getMessage());
+            lblError.setText("Bir hata olu\u015ftu: " + e.getMessage());
         }
     }
 
