@@ -259,7 +259,15 @@ public class DashboardController {
 
     @FXML
     public void handleExport() {
+        String downloadsPath = System.getProperty("user.home") + java.io.File.separator + "Downloads" + java.io.File.separator + "transactions_export.csv";
         ExportService exportService = new ExportService();
-        exportService.exportTransactionsToCSV(repository.getAll(), "transactions_export.csv");
+        String exportedPath = exportService.exportTransactionsToCSV(repository.getAll(), downloadsPath);
+        if (exportedPath != null) {
+            try {
+                java.awt.Desktop.getDesktop().open(new java.io.File(exportedPath));
+            } catch (Exception e) {
+                System.err.println("Dosya a\u00e7\u0131lamad\u0131: " + e.getMessage());
+            }
+        }
     }
 }

@@ -57,6 +57,7 @@
 
 .table-row-cell {
     -fx-background-color: #2d2d30;
+    -fx-cell-size: 38px;
 }
 
 .table-row-cell .table-cell {
