@@ -32,8 +32,8 @@ public class DashboardController {
     @FXML private TableColumn<Transaction, Double> colAmount;
     @FXML private TableColumn<Transaction, Double> colPrice;
     @FXML private TableColumn<Transaction, Double> colTotal;
-    @FXML private TableColumn<Transaction, Double> colCurrentPrice;
-    @FXML private TableColumn<Transaction, Double> colPnL;
+    @FXML private TableColumn<Transaction, String> colCurrentPrice;
+    @FXML private TableColumn<Transaction, String> colPnL;
     @FXML private TableColumn<Transaction, LocalDate> colDate;
     @FXML private TableColumn<Transaction, String> colCategory;
     
@@ -88,32 +88,33 @@ public class DashboardController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
-        colCurrentPrice.setCellValueFactory(new PropertyValueFactory<>("assetName"));
-        colCurrentPrice.setCellFactory(column -> new TableCell<Transaction, Double>() {
+        colCurrentPrice.setCellValueFactory(cellData ->
+            new javafx.beans.property.SimpleStringProperty(cellData.getValue().getAssetName()));
+        colCurrentPrice.setCellFactory(column -> new TableCell<Transaction, String>() {
             @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
+            protected void updateItem(String assetName, boolean empty) {
+                super.updateItem(assetName, empty);
                 setText(null);
-                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) return;
-                Transaction t = getTableView().getItems().get(getIndex());
-                if (t == null) return;
-                Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                if (empty || assetName == null) return;
+                Double currentPrice = marketDataService.getCurrentPrice(assetName);
                 setText(currentPrice != null ? String.format("%.2f TL", currentPrice) : "-");
             }
         });
 
-        colPnL.setCellValueFactory(new PropertyValueFactory<>("assetName"));
-        colPnL.setCellFactory(column -> new TableCell<Transaction, Double>() {
+        colPnL.setCellValueFactory(cellData ->
+            new javafx.beans.property.SimpleStringProperty(cellData.getValue().getAssetName()));
+        colPnL.setCellFactory(column -> new TableCell<Transaction, String>() {
             @Override
-            protected void updateItem(Double item, boolean empty) {
-                super.updateItem(item, empty);
+            protected void updateItem(String assetName, boolean empty) {
+                super.updateItem(assetName, empty);
                 setText(null);
                 setStyle("");
-                if (empty || getIndex() < 0 || getIndex() >= getTableView().getItems().size()) return;
-                Transaction t = getTableView().getItems().get(getIndex());
-                if (t == null) return;
-                if (t.getType() != model.TransactionType.ALIM) { setText("-"); return; }
-                Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                if (empty || assetName == null) return;
+                int idx = getIndex();
+                if (idx < 0 || idx >= getTableView().getItems().size()) return;
+                Transaction t = getTableView().getItems().get(idx);
+                if (t == null || t.getType() != model.TransactionType.ALIM) { setText("-"); return; }
+                Double currentPrice = marketDataService.getCurrentPrice(assetName);
                 if (currentPrice == null) { setText("-"); return; }
                 double pnl = (currentPrice - t.getPricePerUnit()) * t.getAmount();
                 setText(String.format("%.2f TL", pnl));
