@@ -69,8 +69,21 @@ public class DashboardController {
 
     @FXML
     public void handleAddTransaction() {
-        // to be implemented in Day 18
-        System.out.println("Add Transaction clicked");
+        try {
+            javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/ui/AddTransactionDialog.fxml"));
+            javafx.scene.Parent root = loader.load();
+            
+            AddTransactionController controller = loader.getController();
+            controller.setDashboardController(this);
+            
+            javafx.stage.Stage stage = new javafx.stage.Stage();
+            stage.setTitle("Yeni İşlem");
+            stage.initModality(javafx.stage.Modality.APPLICATION_MODAL);
+            stage.setScene(new javafx.scene.Scene(root));
+            stage.showAndWait();
+        } catch (java.io.IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @FXML
