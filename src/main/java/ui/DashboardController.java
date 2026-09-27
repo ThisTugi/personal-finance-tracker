@@ -61,10 +61,30 @@ public class DashboardController {
     }
 
     private void updateSummaries(List<Transaction> dbTransactions) {
-        // Basic placeholder logic for summaries
-        lblTotalPortfolio.setText(dbTransactions.size() + " İşlem");
-        lblMonthlyExpense.setText("0.0 TL");
-        lblNetPnL.setText("0.0 TL");
+        double totalPortfolio = dbTransactions.stream()
+            .filter(t -> t.getType() == model.TransactionType.BUY)
+            .mapToDouble(Transaction::getTotalPrice).sum() 
+            - dbTransactions.stream()
+            .filter(t -> t.getType() == model.TransactionType.SELL)
+            .mapToDouble(Transaction::getTotalPrice).sum();
+
+        service.ExpenseService expenseService = new service.ExpenseService();
+        LocalDate now = LocalDate.now();
+        double monthlyExpense = expenseService.calculateTotalMonthlyExpense(dbTransactions, now.getYear(), now.getMonthValue());
+
+        lblTotalPortfolio.setText(String.format("%.2f TL", totalPortfolio));
+        lblMonthlyExpense.setText(String.format("%.2f TL", monthlyExpense));
+        
+        // PnL placeholder logic
+        lblNetPnL.setText("Hesaplanıyor...");
+
+        java.util.Map<String, Double> distribution = expenseService.calculateExpenseDistribution(dbTransactions, now.getYear(), now.getMonthValue());
+        javafx.scene.chart.PieChart pieChart = new javafx.scene.chart.PieChart();
+        for (java.util.Map.Entry<String, Double> entry : distribution.entrySet()) {
+            pieChart.getData().add(new javafx.scene.chart.PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+        chartContainer.getChildren().clear();
+        chartContainer.getChildren().add(pieChart);
     }
 
     @FXML
