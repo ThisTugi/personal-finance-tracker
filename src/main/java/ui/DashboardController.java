@@ -151,8 +151,19 @@ public class DashboardController {
         lblTotalPortfolio.setText(String.format("%.2f TL", totalPortfolio));
         lblMonthlyExpense.setText(String.format("%.2f TL", monthlyExpense));
         service.PortfolioService portfolioService = new service.PortfolioService();
-        double netPnL = portfolioService.calculateTotalRealizedPnL(dbTransactions);
-        
+        double realizedPnL = portfolioService.calculateTotalRealizedPnL(dbTransactions);
+
+        double unrealizedPnL = 0.0;
+        for (Transaction t : dbTransactions) {
+            if (t.getType() == model.TransactionType.ALIM) {
+                Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                if (currentPrice != null) {
+                    unrealizedPnL += (currentPrice - t.getPricePerUnit()) * t.getAmount();
+                }
+            }
+        }
+        double netPnL = realizedPnL + unrealizedPnL;
+
         lblNetPnL.setText(String.format("%.2f TL", netPnL));
         if (netPnL >= 0) {
             lblNetPnL.setStyle("-fx-text-fill: #4caf50;");

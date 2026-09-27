@@ -16,7 +16,7 @@
                 <Label fx:id="lblMonthlyExpense" text="0.0 TL" styleClass="amount-label"/>
             </VBox>
             <VBox styleClass="summary-card">
-                <Label text="Net Kâr/Zarar"/>
+                <Label text="Net Kâr/Zarar (Portföy)"/>
                 <Label fx:id="lblNetPnL" text="0.0 TL" styleClass="amount-label"/>
             </VBox>
         </HBox>
@@ -31,16 +31,16 @@
             </HBox>
             <TableView fx:id="transactionTable" VBox.vgrow="ALWAYS">
                 <columns>
-                    <TableColumn fx:id="colId" text="ID" prefWidth="50"/>
-                    <TableColumn fx:id="colAsset" text="Varlık / Açıklama" prefWidth="150"/>
-                    <TableColumn fx:id="colType" text="Tür" prefWidth="80"/>
-                    <TableColumn fx:id="colAmount" text="Adet/Miktar" prefWidth="80"/>
-                    <TableColumn fx:id="colPrice" text="Alış/Satış Fiyatı" prefWidth="100"/>
-                    <TableColumn fx:id="colTotal" text="Toplam Tutar" prefWidth="100"/>
-                    <TableColumn fx:id="colCurrentPrice" text="Güncel Fiyat" prefWidth="100"/>
-                    <TableColumn fx:id="colPnL" text="Kâr/Zarar" prefWidth="100"/>
-                    <TableColumn fx:id="colDate" text="Tarih" prefWidth="100"/>
-                    <TableColumn fx:id="colCategory" text="Kategori" prefWidth="120"/>
+                    <TableColumn fx:id="colId" text="ID" prefWidth="40"/>
+                    <TableColumn fx:id="colAsset" text="Varlık / Açıklama" prefWidth="130"/>
+                    <TableColumn fx:id="colType" text="Tür" prefWidth="60"/>
+                    <TableColumn fx:id="colAmount" text="Adet" prefWidth="60"/>
+                    <TableColumn fx:id="colPrice" text="Alış Fiyatı" prefWidth="110"/>
+                    <TableColumn fx:id="colTotal" text="Toplam" prefWidth="110"/>
+                    <TableColumn fx:id="colCurrentPrice" text="Güncel Fiyat" prefWidth="115"/>
+                    <TableColumn fx:id="colPnL" text="Kâr/Zarar" prefWidth="110"/>
+                    <TableColumn fx:id="colDate" text="Tarih" prefWidth="90"/>
+                    <TableColumn fx:id="colCategory" text="Kategori" prefWidth="110"/>
                 </columns>
             </TableView>
         </VBox>
