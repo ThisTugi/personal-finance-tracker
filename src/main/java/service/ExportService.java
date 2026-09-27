@@ -37,9 +37,11 @@ public class ExportService {
                 writer.write(escapeCsv(t.getCurrency() != null ? t.getCurrency() : "TL"));
                 writer.write(";");
                 
-                // Format the date for Turkish Excel (dd.MM.yyyy)
+                // Excel'de "########" hatasını önlemek için formül string olarak veriyoruz: ="27.09.2026"
                 DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
-                writer.write(t.getDate() != null ? t.getDate().format(formatter) : "");
+                if (t.getDate() != null) {
+                    writer.write("=\"" + t.getDate().format(formatter) + "\"");
+                }
                 
                 writer.write(";");
                 writer.write(escapeCsv(t.getCategory() != null ? t.getCategory() : ""));
