@@ -19,14 +19,15 @@ public class MarketDataService {
                     .uri(URI.create(API_URL))
                     .build();
             
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
-            JSONObject json = new JSONObject(response.body());
+            HttpResponse<byte[]> response = client.send(request, HttpResponse.BodyHandlers.ofByteArray());
+            String body = new String(response.body(), java.nio.charset.StandardCharsets.UTF_8);
+            JSONObject json = new JSONObject(body);
             
             for (String key : json.keySet()) {
                 if (key.equals("Update_Date")) continue;
                 JSONObject item = json.getJSONObject(key);
-                if (item.has("Satış")) {
-                    String satisStr = item.getString("Satış").replace(".", "").replace(",", ".").replace("$", "").trim();
+                if (item.has("Sat\u0131\u015F")) { // Satış with unicode escape
+                    String satisStr = item.getString("Sat\u0131\u015F").replace(".", "").replace(",", ".").replace("$", "").trim();
                     try {
                         double price = Double.parseDouble(satisStr);
                         currentPrices.put(key.toLowerCase(), price);
