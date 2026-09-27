@@ -33,7 +33,14 @@ public class DatabaseManager {
              Statement stmt = conn.createStatement()) {
 
             stmt.execute(sql);
-            System.out.println("Veritabanı tabloları başarıyla hazırlandı.");
+            
+            // Veritabanındaki eski İngilizce kayıtları Türkçe'ye çeviriyoruz (Migration)
+            stmt.executeUpdate("UPDATE transactions SET type = 'ALIM' WHERE type = 'BUY'");
+            stmt.executeUpdate("UPDATE transactions SET type = 'SATIM' WHERE type = 'SELL'");
+            stmt.executeUpdate("UPDATE transactions SET type = 'GIDER' WHERE type = 'EXPENSE'");
+            stmt.executeUpdate("UPDATE transactions SET type = 'GELIR' WHERE type = 'INCOME'");
+            
+            System.out.println("Veritabanı tabloları başarıyla hazırlandı ve güncellendi.");
 
         } catch (SQLException e) {
             System.err.println("Veritabanı başlatılırken hata oluştu: " + e.getMessage());

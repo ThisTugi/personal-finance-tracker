@@ -62,10 +62,10 @@ public class DashboardController {
 
     private void updateSummaries(List<Transaction> dbTransactions) {
         double totalPortfolio = dbTransactions.stream()
-            .filter(t -> t.getType() == model.TransactionType.BUY)
+            .filter(t -> t.getType() == model.TransactionType.ALIM)
             .mapToDouble(Transaction::getTotalPrice).sum() 
             - dbTransactions.stream()
-            .filter(t -> t.getType() == model.TransactionType.SELL)
+            .filter(t -> t.getType() == model.TransactionType.SATIM)
             .mapToDouble(Transaction::getTotalPrice).sum();
 
         service.ExpenseService expenseService = new service.ExpenseService();

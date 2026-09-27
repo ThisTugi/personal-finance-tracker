@@ -11,7 +11,7 @@ public class ExpenseService {
 
     public double calculateTotalMonthlyExpense(List<Transaction> transactions, int year, int month) {
         return transactions.stream()
-                .filter(t -> t.getType() == TransactionType.EXPENSE)
+                .filter(t -> t.getType() == TransactionType.GIDER)
                 .filter(t -> t.getDate().getYear() == year && t.getDate().getMonthValue() == month)
                 .mapToDouble(Transaction::getTotalPrice)
                 .sum();
@@ -27,7 +27,7 @@ public class ExpenseService {
 
         Map<String, Double> categoryTotals = new HashMap<>();
         for (Transaction t : transactions) {
-            if (t.getType() == TransactionType.EXPENSE && t.getDate().getYear() == year && t.getDate().getMonthValue() == month) {
+            if (t.getType() == TransactionType.GIDER && t.getDate().getYear() == year && t.getDate().getMonthValue() == month) {
                 categoryTotals.put(t.getCategory(), categoryTotals.getOrDefault(t.getCategory(), 0.0) + t.getTotalPrice());
             }
         }

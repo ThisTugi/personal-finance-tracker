@@ -19,13 +19,13 @@ public class ValidationService {
             throw new IllegalArgumentException("Asset name cannot be empty");
         }
         
-        if (t.getType() == TransactionType.SELL) {
+        if (t.getType() == TransactionType.SATIM) {
             double currentAmount = 0.0;
             for (Transaction existing : allTransactions) {
                 if (existing.getAssetName().equals(t.getAssetName())) {
-                    if (existing.getType() == TransactionType.BUY) {
+                    if (existing.getType() == TransactionType.ALIM) {
                         currentAmount += existing.getAmount();
-                    } else if (existing.getType() == TransactionType.SELL) {
+                    } else if (existing.getType() == TransactionType.SATIM) {
                         currentAmount -= existing.getAmount();
                     }
                 }

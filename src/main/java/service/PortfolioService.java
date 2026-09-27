@@ -12,7 +12,7 @@ public class PortfolioService {
         double totalAmount = 0.0;
 
         for (Transaction t : transactions) {
-            if (t.getAssetName().equals(assetName) && t.getType() == TransactionType.BUY) {
+            if (t.getAssetName().equals(assetName) && t.getType() == TransactionType.ALIM) {
                 totalCost += (t.getAmount() * t.getPricePerUnit());
                 totalAmount += t.getAmount();
             }
@@ -32,10 +32,10 @@ public class PortfolioService {
         // Varsayım: List<Transaction> tarih sırasına göre sıralı gelmektedir.
         for (Transaction t : transactions) {
             if (t.getAssetName().equals(assetName)) {
-                if (t.getType() == TransactionType.BUY) {
+                if (t.getType() == TransactionType.ALIM) {
                     currentAmount += t.getAmount();
                     totalCost += (t.getAmount() * t.getPricePerUnit());
-                } else if (t.getType() == TransactionType.SELL) {
+                } else if (t.getType() == TransactionType.SATIM) {
                     double averageCost = (currentAmount == 0) ? 0 : (totalCost / currentAmount);
                     double profit = (t.getPricePerUnit() - averageCost) * t.getAmount();
                     realizedPnL += profit;

@@ -22,7 +22,7 @@ public class PortfolioServiceTest {
     @Test
     public void testWeightedAverageCost_SingleBuy() {
         List<Transaction> transactions = new ArrayList<>();
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 150.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 150.0, LocalDate.now(), "Investment"));
         
         double avgCost = portfolioService.calculateWeightedAverageCost(transactions, "AAPL");
         assertEquals(150.0, avgCost, 0.01);
@@ -31,8 +31,8 @@ public class PortfolioServiceTest {
     @Test
     public void testWeightedAverageCost_MultipleBuys() {
         List<Transaction> transactions = new ArrayList<>();
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 100.0, LocalDate.now(), "Investment"));
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 200.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 100.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 200.0, LocalDate.now(), "Investment"));
         
         double avgCost = portfolioService.calculateWeightedAverageCost(transactions, "AAPL");
         // (10*100 + 10*200) / 20 = 150.0
@@ -42,8 +42,8 @@ public class PortfolioServiceTest {
     @Test
     public void testRealizedPnL_SellAll() {
         List<Transaction> transactions = new ArrayList<>();
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 100.0, LocalDate.now(), "Investment"));
-        transactions.add(new Transaction("AAPL", TransactionType.SELL, 10, 150.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 100.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.SATIM, 10, 150.0, LocalDate.now(), "Investment"));
         
         double pnl = portfolioService.calculateRealizedPnL(transactions, "AAPL");
         // 10 * (150 - 100) = 500.0
@@ -53,9 +53,9 @@ public class PortfolioServiceTest {
     @Test
     public void testRealizedPnL_PartialSellWithMultipleBuys() {
         List<Transaction> transactions = new ArrayList<>();
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 100.0, LocalDate.now(), "Investment"));
-        transactions.add(new Transaction("AAPL", TransactionType.BUY, 10, 200.0, LocalDate.now(), "Investment"));
-        transactions.add(new Transaction("AAPL", TransactionType.SELL, 10, 180.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 100.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.ALIM, 10, 200.0, LocalDate.now(), "Investment"));
+        transactions.add(new Transaction("AAPL", TransactionType.SATIM, 10, 180.0, LocalDate.now(), "Investment"));
         
         double pnl = portfolioService.calculateRealizedPnL(transactions, "AAPL");
         // Average cost is 150. Selling 10 at 180.

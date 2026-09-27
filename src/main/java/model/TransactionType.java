@@ -1,7 +1,8 @@
 package model;
 
 public enum TransactionType {
-    BUY,
-    SELL,
-    EXPENSE
+    ALIM,
+    SATIM,
+    GIDER,
+    GELIR
 }
