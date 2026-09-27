@@ -35,7 +35,9 @@ public class DashboardController {
     @FXML private TableColumn<Transaction, LocalDate> colDate;
     @FXML private TableColumn<Transaction, String> colCategory;
     
-    @FXML private StackPane chartContainer;
+    @FXML private StackPane summaryChartContainer;
+    @FXML private StackPane expenseChartContainer;
+    @FXML private StackPane incomeChartContainer;
 
     private ITransactionRepository repository;
     private ObservableList<Transaction> transactionList;
@@ -118,13 +120,31 @@ public class DashboardController {
             lblNetPnL.setStyle("-fx-text-fill: #f44336;");
         }
 
-        java.util.Map<String, Double> distribution = expenseService.calculateExpenseDistribution(dbTransactions, now.getYear(), now.getMonthValue());
-        javafx.scene.chart.PieChart pieChart = new javafx.scene.chart.PieChart();
-        for (java.util.Map.Entry<String, Double> entry : distribution.entrySet()) {
-            pieChart.getData().add(new javafx.scene.chart.PieChart.Data(entry.getKey(), entry.getValue()));
+        // Gider Dağılımı
+        java.util.Map<String, Double> expDistribution = expenseService.calculateExpenseDistribution(dbTransactions, now.getYear(), now.getMonthValue());
+        javafx.scene.chart.PieChart expPieChart = new javafx.scene.chart.PieChart();
+        for (java.util.Map.Entry<String, Double> entry : expDistribution.entrySet()) {
+            expPieChart.getData().add(new javafx.scene.chart.PieChart.Data(entry.getKey(), entry.getValue()));
         }
-        chartContainer.getChildren().clear();
-        chartContainer.getChildren().add(pieChart);
+        expenseChartContainer.getChildren().clear();
+        expenseChartContainer.getChildren().add(expPieChart);
+
+        // Gelir Dağılımı
+        java.util.Map<String, Double> incDistribution = expenseService.calculateIncomeDistribution(dbTransactions, now.getYear(), now.getMonthValue());
+        javafx.scene.chart.PieChart incPieChart = new javafx.scene.chart.PieChart();
+        for (java.util.Map.Entry<String, Double> entry : incDistribution.entrySet()) {
+            incPieChart.getData().add(new javafx.scene.chart.PieChart.Data(entry.getKey(), entry.getValue()));
+        }
+        incomeChartContainer.getChildren().clear();
+        incomeChartContainer.getChildren().add(incPieChart);
+
+        // Gelir/Gider Özeti (Karşılaştırma)
+        double totalIncome = expenseService.calculateTotalMonthlyIncome(dbTransactions, now.getYear(), now.getMonthValue());
+        javafx.scene.chart.PieChart summaryPieChart = new javafx.scene.chart.PieChart();
+        if (totalIncome > 0) summaryPieChart.getData().add(new javafx.scene.chart.PieChart.Data("Gelir", totalIncome));
+        if (monthlyExpense > 0) summaryPieChart.getData().add(new javafx.scene.chart.PieChart.Data("Gider", monthlyExpense));
+        summaryChartContainer.getChildren().clear();
+        summaryChartContainer.getChildren().add(summaryPieChart);
     }
 
     @FXML

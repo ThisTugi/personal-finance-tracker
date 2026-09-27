@@ -43,9 +43,16 @@
         </VBox>
     </center>
     <right>
-        <VBox style="-fx-padding: 20;" alignment="CENTER">
-            <Label text="Gider Dağılımı"/>
-            <StackPane fx:id="chartContainer" prefWidth="300" prefHeight="300"/>
-        </VBox>
+        <TabPane fx:id="chartTabPane" style="-fx-padding: 10;" prefWidth="320" tabClosingPolicy="UNAVAILABLE">
+            <Tab text="Gelir/Gider Özeti">
+                <StackPane fx:id="summaryChartContainer" prefWidth="300" prefHeight="300"/>
+            </Tab>
+            <Tab text="Gider Dağılımı">
+                <StackPane fx:id="expenseChartContainer" prefWidth="300" prefHeight="300"/>
+            </Tab>
+            <Tab text="Gelir Dağılımı">
+                <StackPane fx:id="incomeChartContainer" prefWidth="300" prefHeight="300"/>
+            </Tab>
+        </TabPane>
     </right>
 </BorderPane>

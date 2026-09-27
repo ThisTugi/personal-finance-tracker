@@ -39,4 +39,35 @@ public class ExpenseService {
 
         return distribution;
     }
+
+    public double calculateTotalMonthlyIncome(List<Transaction> transactions, int year, int month) {
+        return transactions.stream()
+                .filter(t -> t.getType() == TransactionType.GELIR)
+                .filter(t -> t.getDate().getYear() == year && t.getDate().getMonthValue() == month)
+                .mapToDouble(Transaction::getTotalPrice)
+                .sum();
+    }
+
+    public Map<String, Double> calculateIncomeDistribution(List<Transaction> transactions, int year, int month) {
+        double totalIncome = calculateTotalMonthlyIncome(transactions, year, month);
+        Map<String, Double> distribution = new HashMap<>();
+
+        if (totalIncome == 0) {
+            return distribution;
+        }
+
+        Map<String, Double> categoryTotals = new HashMap<>();
+        for (Transaction t : transactions) {
+            if (t.getType() == TransactionType.GELIR && t.getDate().getYear() == year && t.getDate().getMonthValue() == month) {
+                categoryTotals.put(t.getCategory(), categoryTotals.getOrDefault(t.getCategory(), 0.0) + t.getTotalPrice());
+            }
+        }
+
+        for (Map.Entry<String, Double> entry : categoryTotals.entrySet()) {
+            double percentage = (entry.getValue() / totalIncome) * 100.0;
+            distribution.put(entry.getKey(), percentage);
+        }
+
+        return distribution;
+    }
 }
