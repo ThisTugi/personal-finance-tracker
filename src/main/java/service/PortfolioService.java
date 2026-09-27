@@ -23,4 +23,28 @@ public class PortfolioService {
         }
         return totalCost / totalAmount;
     }
+
+    public double calculateRealizedPnL(List<Transaction> transactions, String assetName) {
+        double realizedPnL = 0.0;
+        double currentAmount = 0.0;
+        double totalCost = 0.0;
+
+        // Varsayım: List<Transaction> tarih sırasına göre sıralı gelmektedir.
+        for (Transaction t : transactions) {
+            if (t.getAssetName().equals(assetName)) {
+                if (t.getType() == TransactionType.BUY) {
+                    currentAmount += t.getAmount();
+                    totalCost += (t.getAmount() * t.getPricePerUnit());
+                } else if (t.getType() == TransactionType.SELL) {
+                    double averageCost = (currentAmount == 0) ? 0 : (totalCost / currentAmount);
+                    double profit = (t.getPricePerUnit() - averageCost) * t.getAmount();
+                    realizedPnL += profit;
+                    
+                    currentAmount -= t.getAmount();
+                    totalCost -= (averageCost * t.getAmount());
+                }
+            }
+        }
+        return realizedPnL;
+    }
 }
