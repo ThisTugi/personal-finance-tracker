@@ -32,6 +32,8 @@ public class DashboardController {
     @FXML private TableColumn<Transaction, Double> colAmount;
     @FXML private TableColumn<Transaction, Double> colPrice;
     @FXML private TableColumn<Transaction, Double> colTotal;
+    @FXML private TableColumn<Transaction, Double> colCurrentPrice;
+    @FXML private TableColumn<Transaction, Double> colPnL;
     @FXML private TableColumn<Transaction, LocalDate> colDate;
     @FXML private TableColumn<Transaction, String> colCategory;
     
@@ -41,9 +43,11 @@ public class DashboardController {
 
     private ITransactionRepository repository;
     private ObservableList<Transaction> transactionList;
+    private service.MarketDataService marketDataService;
 
     public DashboardController() {
         repository = new SqliteTransactionRepository();
+        marketDataService = new service.MarketDataService();
     }
 
     @FXML
@@ -84,7 +88,55 @@ public class DashboardController {
         colDate.setCellValueFactory(new PropertyValueFactory<>("date"));
         colCategory.setCellValueFactory(new PropertyValueFactory<>("category"));
 
-        loadTransactions();
+        colCurrentPrice.setCellFactory(column -> new TableCell<Transaction, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView().getItems().get(getIndex()) == null) {
+                    setText(null);
+                } else {
+                    Transaction t = getTableView().getItems().get(getIndex());
+                    Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                    if (currentPrice != null) {
+                        setText(String.format("%.2f %s", currentPrice, "TL"));
+                    } else {
+                        setText("-");
+                    }
+                }
+            }
+        });
+
+        colPnL.setCellFactory(column -> new TableCell<Transaction, Double>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableView().getItems().get(getIndex()) == null) {
+                    setText(null);
+                } else {
+                    Transaction t = getTableView().getItems().get(getIndex());
+                    Double currentPrice = marketDataService.getCurrentPrice(t.getAssetName());
+                    if (currentPrice != null && t.getType() == model.TransactionType.ALIM) {
+                        // Eğer ALIM ise güncel fiyattan kâr-zarar
+                        double pnl = (currentPrice - t.getPricePerUnit()) * t.getAmount();
+                        setText(String.format("%.2f TL", pnl));
+                        if (pnl >= 0) {
+                            setStyle("-fx-text-fill: #4caf50;");
+                        } else {
+                            setStyle("-fx-text-fill: #f44336;");
+                        }
+                    } else {
+                        setText("-");
+                        setStyle("");
+                    }
+                }
+            }
+        });
+
+        // Verileri çekmeden önce piyasa verilerini alalım
+        new Thread(() -> {
+            marketDataService.fetchPrices();
+            javafx.application.Platform.runLater(this::loadTransactions);
+        }).start();
     }
 
     public void loadTransactions() {
