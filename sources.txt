@@ -1,0 +1,15 @@
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\Main.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\model\Category.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\model\PortfolioItem.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\model\Transaction.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\model\TransactionType.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\repository\DatabaseManager.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\repository\ITransactionRepository.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\repository\SqliteTransactionRepository.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\service\ExpenseService.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\service\ExportService.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\service\PortfolioService.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\service\ValidationService.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\ui\AddTransactionController.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\ui\App.java
+C:\Users\Tu§rahan\Desktop\TradeApp\TradeApp\src\main\java\ui\DashboardController.java
