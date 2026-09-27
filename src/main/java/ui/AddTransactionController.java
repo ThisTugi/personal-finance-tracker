@@ -17,9 +17,12 @@ import java.time.LocalDate;
 public class AddTransactionController {
 
     @FXML private TextField txtAsset;
+    @FXML private Label lblAsset;
     @FXML private ComboBox<TransactionType> cbType;
     @FXML private TextField txtAmount;
+    @FXML private Label lblAmount;
     @FXML private TextField txtPrice;
+    @FXML private Label lblPrice;
     @FXML private TextField txtCategory;
     @FXML private Label lblError;
 
@@ -36,6 +39,23 @@ public class AddTransactionController {
         repository = new SqliteTransactionRepository();
         validationService = new ValidationService();
         cbType.setItems(FXCollections.observableArrayList(TransactionType.values()));
+        
+        cbType.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == TransactionType.GELIR || newVal == TransactionType.GIDER) {
+                lblAsset.setText("Açıklama / Kalem:");
+                lblAmount.setText("Adet (Oto: 1):");
+                txtAmount.setText("1");
+                txtAmount.setDisable(true);
+                lblPrice.setText("Toplam Tutar:");
+            } else {
+                lblAsset.setText("Varlık Adı:");
+                lblAmount.setText("Miktar:");
+                txtAmount.setText("");
+                txtAmount.setDisable(false);
+                lblPrice.setText("Birim Fiyat:");
+            }
+        });
+        
         cbType.getSelectionModel().selectFirst();
     }
 

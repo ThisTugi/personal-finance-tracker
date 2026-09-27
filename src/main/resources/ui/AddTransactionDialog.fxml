@@ -10,16 +10,16 @@
     <Label text="Yeni İşlem Ekle" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
     
     <GridPane hgap="10" vgap="10">
-        <Label text="Varlık Adı:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
+        <Label fx:id="lblAsset" text="Varlık Adı:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
         <TextField fx:id="txtAsset" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
         
         <Label text="İşlem Türü:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <ComboBox fx:id="cbType" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
         
-        <Label text="Miktar:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
+        <Label fx:id="lblAmount" text="Miktar:" GridPane.columnIndex="0" GridPane.rowIndex="2"/>
         <TextField fx:id="txtAmount" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         
-        <Label text="Fiyat:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
+        <Label fx:id="lblPrice" text="Fiyat:" GridPane.columnIndex="0" GridPane.rowIndex="3"/>
         <TextField fx:id="txtPrice" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
         
         <Label text="Kategori:" GridPane.columnIndex="0" GridPane.rowIndex="4"/>
