@@ -97,11 +97,34 @@ public class SqliteTransactionRepository implements ITransactionRepository {
 
     @Override
     public void update(Transaction t) {
-        // To be implemented on Day 7
+        String sql = "UPDATE transactions SET asset_name = ?, type = ?, amount = ?, price_per_unit = ?, date = ?, category = ? WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, t.getAssetName());
+            pstmt.setString(2, t.getType().name());
+            pstmt.setDouble(3, t.getAmount());
+            pstmt.setDouble(4, t.getPricePerUnit());
+            pstmt.setString(5, t.getDate().toString());
+            pstmt.setString(6, t.getCategory());
+            pstmt.setInt(7, t.getId());
+            
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error updating transaction: " + e.getMessage());
+        }
     }
 
     @Override
     public void delete(int id) {
-        // To be implemented on Day 7
+        String sql = "DELETE FROM transactions WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.err.println("Error deleting transaction: " + e.getMessage());
+        }
     }
 }
