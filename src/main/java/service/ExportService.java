@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class ExportService {
@@ -35,7 +36,11 @@ public class ExportService {
                 writer.write(";");
                 writer.write(escapeCsv(t.getCurrency() != null ? t.getCurrency() : "TL"));
                 writer.write(";");
-                writer.write(t.getDate().toString());
+                
+                // Format the date for Turkish Excel (dd.MM.yyyy)
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+                writer.write(t.getDate() != null ? t.getDate().format(formatter) : "");
+                
                 writer.write(";");
                 writer.write(escapeCsv(t.getCategory() != null ? t.getCategory() : ""));
                 writer.newLine();
