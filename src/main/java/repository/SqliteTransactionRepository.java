@@ -29,19 +29,70 @@ public class SqliteTransactionRepository implements ITransactionRepository {
         }
     }
 
+    private Transaction mapResultSetToTransaction(ResultSet rs) throws SQLException {
+        return new Transaction(
+                rs.getInt("id"),
+                rs.getString("asset_name"),
+                TransactionType.valueOf(rs.getString("type")),
+                rs.getDouble("amount"),
+                rs.getDouble("price_per_unit"),
+                LocalDate.parse(rs.getString("date")),
+                rs.getString("category")
+        );
+    }
+
     @Override
     public List<Transaction> getAll() {
-        return new ArrayList<>(); // To be implemented on Day 6
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transactions";
+        try (Connection conn = DatabaseManager.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+            
+            while (rs.next()) {
+                transactions.add(mapResultSetToTransaction(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving transactions: " + e.getMessage());
+        }
+        return transactions;
     }
 
     @Override
     public List<Transaction> getByCategory(String category) {
-        return new ArrayList<>(); // To be implemented on Day 6
+        List<Transaction> transactions = new ArrayList<>();
+        String sql = "SELECT * FROM transactions WHERE category = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setString(1, category);
+            ResultSet rs = pstmt.executeQuery();
+            
+            while (rs.next()) {
+                transactions.add(mapResultSetToTransaction(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving transactions by category: " + e.getMessage());
+        }
+        return transactions;
     }
 
     @Override
     public Transaction getById(int id) {
-        return null; // To be implemented on Day 6
+        String sql = "SELECT * FROM transactions WHERE id = ?";
+        try (Connection conn = DatabaseManager.getConnection();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            
+            pstmt.setInt(1, id);
+            ResultSet rs = pstmt.executeQuery();
+            
+            if (rs.next()) {
+                return mapResultSetToTransaction(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error retrieving transaction by id: " + e.getMessage());
+        }
+        return null;
     }
 
     @Override
