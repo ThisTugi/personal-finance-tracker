@@ -11,7 +11,7 @@
     
     <GridPane hgap="10" vgap="10">
         <Label fx:id="lblAsset" text="Varlık Adı:" GridPane.columnIndex="0" GridPane.rowIndex="0"/>
-        <TextField fx:id="txtAsset" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
+        <ComboBox fx:id="cbAsset" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="0"/>
         
         <Label text="İşlem Türü:" GridPane.columnIndex="0" GridPane.rowIndex="1"/>
         <ComboBox fx:id="cbType" GridPane.columnIndex="1" GridPane.rowIndex="1"/>

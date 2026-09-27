@@ -68,11 +68,11 @@
 }
 
 .table-row-cell:selected .text {
-    -fx-fill: white;
+    -fx-fill: white !important;
 }
 
 .table-row-cell:selected .table-cell {
-    -fx-text-fill: white;
+    -fx-text-fill: white !important;
 }
 
 .tab-pane .tab-header-area .tab-header-background {

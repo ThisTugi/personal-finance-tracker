@@ -16,7 +16,7 @@ import java.time.LocalDate;
 
 public class AddTransactionController {
 
-    @FXML private TextField txtAsset;
+    @FXML private ComboBox<String> cbAsset;
     @FXML private Label lblAsset;
     @FXML private ComboBox<TransactionType> cbType;
     @FXML private TextField txtAmount;
@@ -46,6 +46,7 @@ public class AddTransactionController {
         cbType.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             if (newVal == TransactionType.GELIR) {
                 lblAsset.setText("Açıklama / Kalem:");
+                cbAsset.setItems(FXCollections.observableArrayList());
                 lblAmount.setText("Adet (Oto: 1):");
                 txtAmount.setText("1");
                 txtAmount.setDisable(true);
@@ -53,6 +54,7 @@ public class AddTransactionController {
                 cbCategory.setItems(FXCollections.observableArrayList(model.Category.getIncomeCategories()));
             } else if (newVal == TransactionType.GIDER) {
                 lblAsset.setText("Açıklama / Kalem:");
+                cbAsset.setItems(FXCollections.observableArrayList());
                 lblAmount.setText("Adet (Oto: 1):");
                 txtAmount.setText("1");
                 txtAmount.setDisable(true);
@@ -60,6 +62,7 @@ public class AddTransactionController {
                 cbCategory.setItems(FXCollections.observableArrayList(model.Category.getExpenseCategories()));
             } else {
                 lblAsset.setText("Varlık Adı:");
+                cbAsset.setItems(FXCollections.observableArrayList("Gram Altın", "Çeyrek Altın", "Yarım Altın", "Tam Altın", "Gümüş", "USD", "EUR"));
                 lblAmount.setText("Miktar:");
                 txtAmount.setText("");
                 txtAmount.setDisable(false);
@@ -75,7 +78,10 @@ public class AddTransactionController {
     @FXML
     public void handleSave() {
         try {
-            String asset = txtAsset.getText();
+            String asset = cbAsset.getValue();
+            if (asset == null || asset.trim().isEmpty()) {
+                asset = cbAsset.getEditor().getText(); // Fallback for manual typing if getValue() returns null
+            }
             TransactionType type = cbType.getValue();
             double amount = Double.parseDouble(txtAmount.getText());
             double price = Double.parseDouble(txtPrice.getText());
@@ -106,7 +112,7 @@ public class AddTransactionController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) txtAsset.getScene().getWindow();
+        Stage stage = (Stage) cbAsset.getScene().getWindow();
         stage.close();
     }
 }

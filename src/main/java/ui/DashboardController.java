@@ -193,6 +193,14 @@ public class DashboardController {
     }
 
     @FXML
+    public void handleRefresh() {
+        new Thread(() -> {
+            marketDataService.fetchPrices();
+            javafx.application.Platform.runLater(this::loadTransactions);
+        }).start();
+    }
+
+    @FXML
     public void handleAddTransaction() {
         try {
             javafx.fxml.FXMLLoader loader = new javafx.fxml.FXMLLoader(getClass().getResource("/ui/AddTransactionDialog.fxml"));
